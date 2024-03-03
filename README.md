@@ -40,4 +40,4 @@ For some pages, there is also the possibility to add, edit or delete an entry.
 
 ### Footnote
 
-The content of this project is purely fictional, written in Romanian and is not meant to be used in a real court trial management system and. This is a project made for educational purposes only.
+The content of this project is purely fictional, written in Romanian and is not meant to be used in a real court trial management system. This is a project made for educational purposes only.
