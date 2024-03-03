@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}"> 
+{%endblock%}
+
+
+{% block content %}
+
+    <a href="{{url_for("judecatori.judecatori_page")}}" class="legi_link"><h1 class="text-decoration-underline">Lista Judecatori</h1></a>
+
+    <p>Cautati dupa numele judecatorului:</p>
+    <form class="input" method ="post" onsubmit="return searchAction(this);">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="judecator" id="judecator"/>
+        <button type="submit" class="btn btn-primary search-btn">Search</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope = "col">#</th>
+                <th scope = "col">Nume si Prenume</th>
+                <th scope = "col">CNP</th>
+                <th scope = "col">Telefon</th>
+                <th scope = "col">Email</th>
+                <th scope = "col">Dosarele unde sunt prezenti</th>
+                <!-- Add button -->
+                <th scope = "col"><button class="btn btn-primary btn-sm add-button " id="addBtn" >Add</button></th>  
+            </tr>
+        </thead>
+        <!-- Add more column headers for directii fields as needed on different line -->
+        {% for item in judecatori_data %}
+        <tr>
+            <td scope = "row">{{ loop.index }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>         
+            <td>{{ item[3] }}</td> 
+            <td>{{ item[4] }}</td> 
+            <td>
+                {% if item[5] == 0%}
+                    <p>Niciun dosar</p>
+                {% else %}
+                    <p>{{item[5]}}</p>
+                {% endif %}    
+            </td>
+            <td>  
+                <!-- Update button -->
+                <button onclick="showUpdateModal('{{ item[0] }}', '{{ item[1] }}', '{{ item[2] }}', '{{ item[3] }}', '{{ item[4] }}')" class="btn btn-success" id="updateBtn">Update</button>
+                <!-- Delete Button -->
+                <button onclick="showDeleteModal('{{ item[0] }}')" class="btn btn-danger">Delete</button>
+
+                <!--Deletion conformation modal-->
+                <div id="deleteModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close-delete">&times;</span>
+                        <p>Esti sigur ca vrei sa stergi aceasta inregistrare din baza de date?</p>
+                        <form action="/delete_judecator/{{ item[0] }}" method="post">
+                            <input type="hidden" name="id" id="delete-id">
+                            <input type="submit" value="Delete" class="btn btn-danger delete-submit-btn">
+                        </form>
+                    </div>
+                </div>
+
+                
+                <!-- The Update Modal -->
+                <div id="updateModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close-update">&times;</span>
+                            <form class="flex-modal" action="/update_judecator" method="post" >
+                                <input type="hidden" name="id">
+                                
+                                <!--Elementele pentru formularul de update-->
+                                <label for="Nume">Nume</label>
+                                <input type="text" id="Nume" name="Nume">
+                                <label for="Prenume">Prenume</label>
+                                <input type="text" id="Prenume" name="Prenume">
+                                <label for="CNP">CNP</label>
+                                <input type="text" id="CNP" name="CNP">
+                                <label for="Telefon">Telefon</label>
+                                <input type="text" id="Telefon" name="Telefon">
+                                <label for="Email">Email</label>
+                                <input type="text" id="Email" name="Email">
+                                <input type="submit" value="Submit" class="btn btn-primary update-submit-btn">
+                            </form>
+                        
+                    </div>
+                </div>
+
+            </td> 
+
+        </tr>
+        {% endfor %}
+
+        <!-- The Add Modal -->
+        <div id="addModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close-add">&times;</span>
+                <form id="addForm" action="/add_judecator" method="post">
+
+                    <label for="Nume">Nume</label>
+                    <input type="text" id="Nume" name="Nume">
+                    <label for="Prenume">Prenume</label>
+                    <input type="text" id="Prenume" name="Prenume">
+                    <label for="CNP">CNP</label>
+                    <input type="text" id="CNP" name="CNP">
+                    <label for="Telefon">Telefon</label>
+                    <input type="text" id="Telefon" name="Telefon">
+                    <label for="Email">Email</label>
+                    <input type="text" id="Email" name="Email">
+                    <label for="Dosare">Dosar la care este asociat</label>
+                    <input type="text" id="Dosare" name="Dosare">
+                    <input type="submit" value="Submit" class="btn btn-primary add-submit-btn">
+
+                </form>
+            </div>
+        </div>
+        
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+    </table>
+
+    {% if judecatori_data|length == 0%}
+        <p>Nu exista niciun judecator in baza de date. Apasati pe butonul "Add" pentru a adauga un judecator.</p>
+    {% endif %}
+
+    {%block custom_scripts%}
+        <script src="{{ url_for('static', filename='js/judecatori.js') }}"></script> 
+    {%endblock%}
+
+{% endblock %}

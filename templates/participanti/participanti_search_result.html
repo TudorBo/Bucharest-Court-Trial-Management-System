@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}">
+{%endblock%}
+
+
+{% block content %}
+
+    <a href="{{url_for("participanti.participanti_page")}}" class="link"><h1 class="text-decoration-underline">Lista Participanti</h1></a>
+
+    {% if participanti_data %}
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope = "col">#</th>
+                    <th scope = "col">Nume si Prenume</th>
+                    <th scope = "col">CNP</th>
+                    <th scope = "col">Telefon</th>
+                    <th scope = "col">Email</th>
+                    <th scope = "col">Dosarele unde sunt prezenti</th>
+                </tr>
+            </thead>
+        
+            {% for item in participanti_data %}
+            <tr>
+                <td scope = "row">{{ loop.index }}</td>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>         
+                <td>{{ item[2] }}</td> 
+                <td>{{ item[3] }}</td> 
+                <td>{{ item[4] }}</td>
+
+            </tr>
+            {% endfor %}
+            {% if error %}
+                <p>{{ error }}</p>
+            {% endif %}
+        </table>
+    {% else %}
+        <p>Nu exista participanti inregistrati</p>
+    {% endif %}
+
+    
+    {%block custom_scripts%}
+       
+    {%endblock%}
+
+
+
+{% endblock %}

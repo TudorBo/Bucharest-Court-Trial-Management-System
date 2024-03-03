@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}">
+{%endblock%}
+
+
+{% block content %}
+
+    <a href="{{url_for("directii.directii_page")}}" class="legi_link"><h1 class="text-decoration-underline">Lista directii</h1></a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope = "col">#</th>
+                <th scope = "col">Nume</th>
+                <th scope = "col">Descriere</th>
+                <th scope = "col">Dosarele unde sunt implicate</th>
+            </tr>
+        </thead>
+        <!-- Add more column headers for directii fields as needed on different line -->
+        {% for item in directii_data %}
+        <tr>
+            <td scope = "row">{{ loop.index }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+
+            <!-- how to check if the result is 0?-->
+            <td>
+                {% if item[3] == 0 %}
+                    <p>Nu exista dosare</p>
+                {% else %}
+                    <p>{{ item[3] }}</p>
+                {% endif %}
+
+            </td>     
+            
+        </tr>
+        {% endfor %}
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+    </table>
+    
+    {%block custom_scripts%}
+        <script src="{{ url_for('static', filename='js/directii.js') }}"></script>
+    {%endblock%}
+
+
+
+{% endblock %}

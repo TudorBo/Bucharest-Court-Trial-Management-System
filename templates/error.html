@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}">
+{%endblock%}
+
+
+{% block content %}
+    <a href="{{url_for(route)}}" class="link"><h1 class="text-decoration-underline">{{title}}</h1></a>
+    <p>{{error}}</p>
+    <p>{{text}}</p>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}">
+{%endblock%}
+
+
+{% block content %}
+
+    <a href="{{url_for("directii.directii_page")}}" class="legi_link"><h1 class="text-decoration-underline">Lista Directii</h1></a>
+
+    <p>Cautati dupa numele directiei:</p>
+    <form class="input" method ="post" onsubmit="return searchAction(this);">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="directie" id="directie"/>
+        <button type="submit" class="btn btn-primary search-btn">Search</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope = "col">#</th>
+                <th scope = "col">Nume</th>
+                <th scope = "col">Descriere</th>
+                <th scope = "col">Dosarele unde sunt implicate</th>
+                <!-- Add button -->
+                <th scope = "col"><button id="addBtn" class="btn btn-primary btn-sm add-button">Add</button></th>  
+            </tr>
+        </thead>
+        <!-- Add more column headers for directii fields as needed on different line -->
+        {% for item in directii_data %}
+        <tr>
+            <td scope = "row">{{ loop.index }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+
+            <!-- how to check if the result is 0?-->
+            <td>
+                {% if item[3] == 0 %}
+                    <p>Nu exista dosare</p>
+                {% else %}
+                    <p>{{ item[3] }}</p>
+                {% endif %}
+
+            </td>     
+            <td>  
+                <!-- Update button -->
+                <button onclick="showUpdateModal('{{ item[0] }}', '{{ item[1] }}', '{{ item[2] }}')" class="btn btn-success" id="updateBtn">Update</button>
+                <!-- Delete Button -->
+                <button onclick="showDeleteModal('{{ item[0] }}')" class="btn btn-danger">Delete</button>
+
+                <!--Delete modal-->
+                <div id="deleteModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close-delete">&times;</span>
+                        <p>Esti sigur ca vrei sa stergi aceasta inregistrare din baza de date?</p>
+                        <form action="/delete_directie/{{ item[0] }}" method="post">
+                            <input type="hidden" name="id" id="delete-id">
+                            <input type="submit" value="Delete" class="btn btn-danger delete-submit-btn">
+                        </form>
+                    </div>
+                </div>
+
+                <!-- The Update Modal -->
+                <div id="updateModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close-update">&times;</span>
+                        <form class="flex-modal" action="/update_directie" method="post">
+                            <input type="hidden" name="id">
+                            
+                            <!--Elementele pentru formularul de update-->
+                            <label for="Nume">Nume</label>
+                            <input type="text" id="Nume" name="Nume">
+                            <label for="Descriere">Descriere</label>
+                            <input type="text" id="Descriere" name="Descriere">
+                            
+                            <input type="submit" value="Submit" class="btn btn-primary update-submit-btn">
+                        </form>
+                    </div>
+                </div>
+
+            </td> 
+
+        </tr>
+        {% endfor %}
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+    </table>
+
+     <!-- The Add Modal -->
+     <div id="addModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close-add">&times;</span>
+            <form class="flex-modal"id="addForm" action="/add_directie" method="post">
+
+                <label for="Nume">Nume</label>
+                <input type="text" id="Nume" name="Nume">
+                <label for="Descriere">Descriere</label>
+                <input type="text" id="Descriere" name="Descriere">
+                <input type="submit" value="Submit" class="btn btn-primary add-submit-btn">
+
+            </form>
+        </div>
+    </div>
+
+    
+    {%block custom_scripts%}
+        <script src="{{ url_for('static', filename='js/directii.js') }}"></script>
+    {%endblock%}
+
+
+
+{% endblock %}

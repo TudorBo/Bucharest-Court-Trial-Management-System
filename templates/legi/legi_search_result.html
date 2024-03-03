@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/legi_jud_directii.css') }}">
+{%endblock%}
+
+
+{% block content %}
+    <a href="{{url_for("legi.legi_page")}}" class="legi_link"><h1 class="text-decoration-underline">Lista Legi</h1></a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope = "col">#</th>
+                <th scope = "col">Lege</th>
+                <th scope = "col">Descriere</th>
+                <th scope = "col">Dosare create pe baza legii</th>
+                <!-- Add button -->
+            </tr>
+        </thead>
+        <!-- Add more column headers for directii fields as needed on different line -->
+        {% for item in legi_data %}
+        <tr>
+            <td scope = "row">{{ loop.index }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>  
+            <td>
+                {% if item[3] == 0 %}
+                    <p>Nu exista dosare</p>
+                {% else %}
+                    <p>{{ item[3] }}</p>
+                {% endif %}
+            </td>       
+
+        </tr>
+        {% endfor %}
+        
+
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+    </table>
+
+    {%if legi_data|length == 0%}
+        <p>Nu exista legi in baza de date. Apasati pe butonul "Add" pentru a adauga o lege.</p>
+    {%endif%}
+
+     
+
+    {%block custom_scripts%}
+        <script src="{{ url_for('static', filename='js/legi.js') }}"></script>
+    {%endblock%}
+
+
+
+{% endblock %}

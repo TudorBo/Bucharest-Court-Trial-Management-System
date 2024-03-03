@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Tribunalul Bucuresti{% endblock %}
+{%block custom_css%}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dosare.css') }}">
+{%endblock%}
+
+
+{% block content %}
+
+    <a href="{{url_for("dosare.dosare_page")}}" class="dosare_link"><h1 class="text-decoration-underline">Lista Dosare</h1></a>
+
+    <p>Cautati dupa numarul dosarului:</p>
+    <form class="input" method ="post" onsubmit="return searchAction(this);">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="dosar" id="dosar"/>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope = "col">#</th>
+                <th scope = "col">Nr. Dosar</th>
+                <th scope = "col">Lege</th>
+                <th scope = "col">Directie</th>
+                <th scope = "col">Participanti</th>
+                <th scope = "col">Judecatori</th>
+                <th scope = "col">Descriere</th>   
+            </tr>
+        </thead>
+
+        
+        <!-- Add more column headers for directii fields as needed on different line -->
+        {% for item in dosare %}
+        <tr>
+            <td scope = "row">{{ loop.index }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[3] }}</td>
+            <td>{{ item[4] }}</td>
+            <td>
+                {% set ns = namespace(found=false) %}
+                {% for item1 in participanti %}
+                    {% if item[0] == item1[0] %}
+                        <p id="participant">{{ item1[1] }} ({{ item1[2] }})</p>
+                        {% set ns.found = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if not ns.found %}
+                    <p id="participant">Nu exista participanti</p>
+                {% endif %}
+
+            </td>
+            <td>{{ item[6] }}</td>
+            <td>
+                <!-- Button -->
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal{{ loop.index }}">
+                    Vezi detalii
+                </button>
+                
+                <!-- The Modal -->
+                <div id="Modal{{ loop.index }}" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <h4><span class="close">&times;</span></h4>
+                        <p>{{ item[2] }}</p>
+                    </div>
+                </div>
+            </td>  
+
+        </tr>
+        {% endfor %}
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+    </table>
+
+    {%block custom_scripts%}
+        <script src="{{ url_for('static', filename='js/dosare.js') }}"></script>
+    {%endblock%}
+   
+
+  
+{% endblock %}
