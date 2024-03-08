@@ -9,7 +9,7 @@ This project is a simple web application that allows users to view and manage a 
 ### Features
 
 - View all trials (with all the information about the trial, including the laws applied to it, the judge, the participants, etc.)
-- View all laws
+- View all laws included in all trials
 - View all judges
 - View all participants on every trial
 - View all types of particiapants (plaintiff, defendant, witness, etc.)
@@ -24,7 +24,7 @@ For some pages, there is also the possibility to add, edit or delete an entry.
    ``pip install Flask``
 3. Install MySQL
 4. Create a database in MySQL and import the .sql file from the repository which is located in the **"Database"** folder
-5. Change the database credentials in the config.py file
+5. Change the database credentials in the app.py file
 6. Run the application using the following command:
    ``python app.py``
 
