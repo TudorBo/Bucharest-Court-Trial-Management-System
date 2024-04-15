@@ -14,7 +14,7 @@ app.secret_key = "secret key"
 
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '#B0l02oo2!'
+app.config['MYSQL_PASSWORD'] = 'your_password'
 app.config['MYSQL_DB'] = 'tribunal'
 
 mysql = MySQL(app)
